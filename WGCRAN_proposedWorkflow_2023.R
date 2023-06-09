@@ -2,15 +2,13 @@
 
 # proposed workflow for WGCRAN data call on fishing effort of TBB_CRU_16-31
 
-# WG-CRAN
-
-# (proposed workflow to calculate fishing effort
 
 # A) from efalo-format: calculate hours at sea (departure and return datetime, HAS), kwHAS, "fishing hours of hauls" (from log information, fiHAShaul), kwfiHAShaul,    landings of CSH (kg), N vessels
 # B) from ICES VMS data call: fishing effort (hours) from VMS activity (activity windows from speed, fiHASvms), kwfiHASvms, landings of all species (kg, tons)
 
 
 # author: Torsten Schulze, Thuenen-Institute of Sea Fisheries
+# 20230609, T. Schulze: correction of minor bugs in pathes organisation
 # 20220626 modified for NL DATA by U. Beier 
 # 20220628 modified to read table1 in ICES requested format, i.e. specific order of columns, no column name!!!!
 
@@ -21,7 +19,7 @@ library(data.table)
 library(dplyr)
 
 
-years<- c(2009:2021)
+years<- c(2009:2022)
 
 oma<-Sys.time()
 tmstmp<-paste(substr(oma,1,4),substr(oma,6,7),substr(oma,9,10),"_",substr(oma,12,13),substr(oma,15,16),sep="");rm(oma)
@@ -30,7 +28,7 @@ tmstmp
 country<-"DEU"                  # set your country
 
 # set pathes
-# tacefpath    <- "/your.Path"    # EFLALO (and tacsat) path
+# tacefpath    <- "/your.Path"    # clean EFLALO (and tacsat) path
 # icestab1path <- "/your.Path"    # Ices call table 1 path
 # resultPath   <- "/your.Path"    # write the national tables here
 
@@ -42,6 +40,9 @@ if(country == "DEU") source("./pathes.R")
 
 #ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 # A) from ICES VMS data call, table 1 ####
+cat("A) from ICES VMS data call, table 1, derived data", "\n")
+cat("\n")
+
 # functions (from WGSFD QC check)
 d2ir <- function (lon, lat = NULL, useI = FALSE) {
   
@@ -118,8 +119,7 @@ read_ve <- function(file) {
     )
 }
 ve <- 
-  #read_ve("/media/fssf01bhv/vmsdata/DataGlobal/deu2ices/2020/table1_DE_v20210505_220608_2009-2020.csv") %>% 
-  read_ve("/media/sfsfs001vbhv/vmsdata/Projects/ICES_vmsDataCall_2022/runCvD_220525/table1Save.csv") %>% 
+  read_ve(paste(icestab1path, "table1Save.csv", sep="")) %>% 
   csq2pos() %>% 
   # NEED TO CHECK THIS UPSTREAM
   filter(!is.na(lon)) %>% 
@@ -160,6 +160,7 @@ aggrpy_write <- aggr_write %>%
 
 # ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 # B) the EFLALO derived data ####
+cat("B) the EFLALO derived data", "\n")
 
 
 results_yr<-NULL
@@ -298,10 +299,10 @@ results_mnth2<-results_mnth2[, c("country", "year", "month", "hrsAtSea", "hp_hrs
 write.csv(results_yr2,    file=file.path(paste(resultPath, "/results_WGCRAN_prpWrkfl_eflaloVMS_Yr_",    country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".csv",sep="")), quote = TRUE, row.names = FALSE, na="")
 write.csv(results_mnth2,  file=file.path(paste(resultPath, "/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".csv",sep="")), quote = TRUE, row.names = FALSE, na="")
 
-# write excel files on linux server 
+# write excel files on linux server (if wanted)
 # library(openxlsx);  
-# write.xlsx(results_yr,    file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflalo_Yr_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
-# write.xlsx(results_mnth,  file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflalo_Mnth_",country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
+# write.xlsx(results_yr,    file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Yr_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
+# write.xlsx(results_mnth,  file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
 
 
 
