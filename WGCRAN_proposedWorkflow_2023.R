@@ -8,6 +8,7 @@
 
 
 # author: Torsten Schulze, Thuenen-Institute of Sea Fisheries
+# 20230613, T. Schulze: correction of xlsx output (same as for csv)
 # 20230609, T. Schulze: correction of minor bugs in pathes organisation
 # 20220626 modified for NL DATA by U. Beier 
 # 20220628 modified to read table1 in ICES requested format, i.e. specific order of columns, no column name!!!!
@@ -301,8 +302,8 @@ write.csv(results_mnth2,  file=file.path(paste(resultPath, "/results_WGCRAN_prpW
 
 # write excel files on linux server (if wanted)
 # library(openxlsx);  
-# write.xlsx(results_yr,    file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Yr_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
-# write.xlsx(results_mnth,  file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
+ # write.xlsx(results_yr2,    file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Yr_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
+ # write.xlsx(results_mnth2,  file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
 
 
 
