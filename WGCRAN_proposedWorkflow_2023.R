@@ -8,6 +8,7 @@
 
 
 # author: Torsten Schulze, Thuenen-Institute of Sea Fisheries
+# 20230614, T. Schulze: adapting to table 1 2023 format (extra column "AverageInterval")
 # 20230613, T. Schulze: correction of xlsx output (same as for csv)
 # 20230609, T. Schulze: correction of minor bugs in pathes organisation
 # 20220626 modified for NL DATA by U. Beier 
@@ -109,12 +110,13 @@ read_ve <- function(file) {
                   lclass = 11,
                   speed = 12,
                   effort = 13,             # units in hours
-                  length = 14,             # average vessel length
-                  kw = 15,                 # average kw
-                  kwh = 16,                # kw x effort
-                  catch = 17,
-                  value = 18,
-                  spread = 19) %>% 
+                  interval = 14,
+                  length = 15,             # average vessel length
+                  kw = 16,                 # average kw
+                  kwh = 17,                # kw x effort
+                  catch = 18,
+                  value = 19,
+                  spread = 20) %>% 
     dplyr::mutate(value = as.numeric(value),
                   csq = as.character(csq)
     )
@@ -301,15 +303,11 @@ write.csv(results_yr2,    file=file.path(paste(resultPath, "/results_WGCRAN_prpW
 write.csv(results_mnth2,  file=file.path(paste(resultPath, "/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".csv",sep="")), quote = TRUE, row.names = FALSE, na="")
 
 # write excel files on linux server (if wanted)
-# library(openxlsx);  
- # write.xlsx(results_yr2,    file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Yr_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
- # write.xlsx(results_mnth2,  file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
+# library(openxlsx);
+# write.xlsx(results_yr2,    file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Yr_",  country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
+# write.xlsx(results_mnth2,  file=paste0(resultPath,"/results_WGCRAN_prpWrkfl_eflaloVMS_Mnth_",country,"_",tmstmp,"_",  years[1],"-",years[length(years)] ,".xlsx"), sheetName = "WGCRAN", col.names = TRUE, row.names = FALSE, append = FALSE)
 
-
-
-
-# 
-# 
+ 
 # # table 1
 # write.csv(aggr_write,   file=file.path(paste(resultPath, "/monthly_landings_VMS_fishing_hours_", country,".csv",sep="")), quote = TRUE, row.names = FALSE, na="")
 # write.csv(aggrpy_write, file=file.path(paste(resultPath, "/yearly_landings_VMS_fishing_hours_",  country,".csv",sep="")), quote = TRUE, row.names = FALSE, na="")
